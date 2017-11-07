@@ -33,8 +33,12 @@ export interface JiraIssuePickerResponse {
     }>
 }
 
+/**
+ * Jira API Client & Wrapper
+ * Is configured by the JSON config file
+ */
 export class Jira {
-    protected cache: {
+    protected data: {
         projects: { [key: string]: FullProject },
         priorities: Priority[],
         resolutions: Resolution[],
@@ -50,7 +54,7 @@ export class Jira {
                 'X-Atlassian-Token': 'no-check'
             }
         }
-        this.cache          = {
+        this.data           = {
             projects   : {},
             priorities : [],
             resolutions: [],
@@ -72,11 +76,11 @@ export class Jira {
     }
 
     public async getProject(key: string): Promise<FullProject> {
-        if ( this.cache.projects[ key ] !== undefined ) {
-            return resolve(this.cache.projects[ key ])
+        if ( this.data.projects[ key ] !== undefined ) {
+            return resolve(this.data.projects[ key ])
         }
 
-        let project: FullProject   = await parallel({
+        let project: FullProject  = await parallel({
             project : () => this.request('GET', `/project/${key.toUpperCase()}`),
             statuses: () => this.request('GET', `/project/${key.toUpperCase()}/statuses`),
             meta    : () => this.request('GET', `/issue/createmeta/`).query({ projectKeys: key.toUpperCase(), expand: 'projects.issuetypes.fields' })
@@ -85,7 +89,7 @@ export class Jira {
                 statuses: res.statuses.body
             }))
         })
-        this.cache.projects[ key ] = project;
+        this.data.projects[ key ] = project;
         return resolve(project);
     }
 

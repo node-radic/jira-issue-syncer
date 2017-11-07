@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { createJira, IProjectConfig, Syncers } from '../';
 import { resolve } from 'path';
-import { container, lazyInject } from '../lib/Container';
+import { container } from '../lib/Container';
 import { config } from 'dotenv';
 
 
@@ -21,7 +21,7 @@ projectConfig.syncers = projectConfig.syncers.map(syncer => {
     return syncer
 })
 
-let jira   = createJira(projectConfig.jira);
+let jira               = createJira(projectConfig.jira);
 const syncers: Syncers = container.get<Syncers>(Syncers);
 projectConfig.syncers.forEach(syncerConfig => {
     let syncer = syncers.createSyncer(syncerConfig.type, syncerConfig);

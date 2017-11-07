@@ -1,8 +1,39 @@
 import { Thenable } from './interfaces';
 
 
+/**
+ * Shortcut function to the Promise.resolve() method
+ */
+export const resolve = Promise.resolve.bind(Promise)
+
+/**
+ * Shortcut function to the Promise.reject() method
+ */
+export const reject  = Promise.reject.bind(Promise)
+
+/**
+ * Shortcut function to instantiate a new Deferred class
+ * @see Deferred
+ */
 export const defer = <T>() => new Deferred<T>();
 
+/**
+ * A wrapper around the ES6 Promise class to provide a chainable utility object with.
+ *
+ * @example
+ * ```ts
+ * async function doSomethingAsync() : Promise<any> {
+ * const deferred = new Deferred
+ * // equals (my preferred) shortcut:
+ * const d = defer();
+ *
+ * setTimeout(() => d.resolve({}), Math.random())
+ * setTimeout(() => d.reject('Reject was faster!'), Math.random())
+ *
+ * return d.promise
+ * }
+ * ```
+ */
 export class Deferred<T> {
     promise: Promise<T>
     resolve: (value?: T | Thenable<T>) => Promise<T>
@@ -199,7 +230,3 @@ export function waterfall<T>(tasks): Promise<T> {
 
     return nextItem();
 }
-
-
-export const resolve = Promise.resolve.bind(Promise)
-export const reject  = Promise.reject.bind(Promise)

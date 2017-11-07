@@ -5,19 +5,10 @@ import getDecorators from "inversify-inject-decorators";
 
 export type ServiceIdentifier = interfaces.ServiceIdentifier<any>;
 
+/**
+ * Extended InversifyJS Container. Adds a few helper methods
+ */
 export class Container extends BaseContainer {
-    protected static instance: Container;
-
-    protected constructor(containerOptions?: interfaces.ContainerOptions) {
-        super(containerOptions);
-    }
-
-    static getInstance(): Container {
-        if ( Container.instance === undefined ) {
-            Container.instance = new Container()
-        }
-        return Container.instance
-    }
 
     /**
      * Create an instance of a class using the container, making it injectable at runtime and able to @inject on the fly
@@ -40,8 +31,6 @@ export class Container extends BaseContainer {
 
     }
 
-
-
     /**
      * make binds the class in the IoC container if not already bound. then returns the bound instance
      *
@@ -52,7 +41,6 @@ export class Container extends BaseContainer {
         return this.resolve<T>(cls);
     }
 
-
     getParentClasses(cls: Function, classes: Function[] = []): Function[] {
         if ( cls[ '__proto__' ] !== null ) {
             classes.push(cls);
@@ -62,10 +50,6 @@ export class Container extends BaseContainer {
     }
 
     ensureInjectable(cls: Function) {
-        // let parents = this.getParentClasses(cls);
-        //
-        // parents.shift();
-
         try { decorate(injectable(), cls); } catch ( err ) {
             console.log('ensureInjectable', err)
         }
@@ -101,23 +85,61 @@ export class Container extends BaseContainer {
     }
 }
 
-export const container: Container = Container.getInstance();
+/**
+ * The IoC Container instance, used by all exported decorators
+ * @type {Container}
+ */
+export const container: Container = new Container()
 
+/**
+ * @decorator
+ */
 export const injectable = () => _injectable()
+
+/**
+ * @decorator
+ * @type {(serviceIdentifier: (string | symbol | interfaces.Newable<any> | interfaces.Abstract<any>)) => (null: any, null: string) => void}
+ */
 export const lazyInject = getDecorators(container).lazyInject;
+
+/**
+ * @decorator
+ * @type {(serviceIdentifier: (string | symbol | interfaces.Newable<any> | interfaces.Abstract<any>)) => (null: any) => any}
+ */
 export const provide    = makeProvideDecorator(container);
+
+/**
+ * @decorator
+ * @type {(serviceIdentifier: interfaces.ServiceIdentifier<any>) => interfaces.ProvideInWhenOnSyntax<any>}
+ */
 const fprovide  = makeFluentProvideDecorator(container);
 
+/**
+ * @decorator
+ * @param {ServiceIdentifier} identifier
+ * @returns {ClassDecorator}
+ */
 export function singleton (identifier: ServiceIdentifier) : ClassDecorator {
-    return (cls:any) => {
+    return <T>(cls:any) : T => {
         container.ensureInjectable(cls);
         container.bind(identifier).to(cls).inSingletonScope();
+        return cls;
     }
-};
+}
 
+/**
+ * @decorator
+ * @param {ServiceIdentifier} id
+ * @returns {(target: any, targetKey: string, index?: number) => void}
+ */
 export const inject = (id: ServiceIdentifier) => {
     return _inject(id);
 }
+/**
+ * @decorator
+ * @param {ServiceIdentifier} id
+ * @returns {(null: any) => any}
+ */
 export const bindTo = (id: ServiceIdentifier) => {
     return container.bindTo(id);
 }

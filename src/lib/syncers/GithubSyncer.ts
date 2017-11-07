@@ -9,6 +9,10 @@ import { Issue } from '../interfaces/api.jira';
 
 const log = debug('syncer:github')
 
+/**
+ * Wraps the Github API Client, collects all data and synchronizes it with Jira .
+ * Is configured by the JSON config file
+ */
 export class GithubSyncer implements ISyncer {
     static getType = (): SyncerType => 'github'
 
@@ -17,7 +21,7 @@ export class GithubSyncer implements ISyncer {
 
     gh: Github
 
-    protected cache: {
+    protected data: {
         milestones: GithubMilestone[],
         labels: GithubLabel[]
         issues: GithubIssue[]
@@ -25,15 +29,15 @@ export class GithubSyncer implements ISyncer {
     }
 
     constructor(public config: ISyncerConfig) {
-        this.cache = { milestones: [], labels: [], issues: [], events: [] }
-        this.gh    = new Github({
+        this.data = { milestones: [], labels: [], issues: [], events: [] }
+        this.gh   = new Github({
             cache  : true,
             debug  : true,
             timeout: 5000,
             host   : this.config.remote.url,
-
             headers: {
-                'accept'    : 'application/vnd.github.something-custom',
+                // https://developer.github.com/v3/#current-version
+                'accept'    : 'application/vnd.github.v3+json',
                 'cookie'    : 'something custom',
                 'user-agent': 'Jira-Syncer'
             }
@@ -52,9 +56,9 @@ export class GithubSyncer implements ISyncer {
         let labels: GithubResponse<GithubLabel[]>           = await this.gh.issues.getLabels({ owner, repo })
         let issues: GithubResponse<GithubIssue[]>           = await this.gh.issues.getForRepo({ owner, repo, state: 'all', per_page: 999 })
         let events: GithubResponse<GithubRepositoryEvent[]> = await this.gh.activity.getEventsForRepo({ owner, repo })
-        this.cache.events                                   = events.data
-        this.cache.milestones                               = milestones.data
-        this.cache.labels                                   = labels.data
+        this.data.events                                    = events.data
+        this.data.milestones                                = milestones.data
+        this.data.labels                                    = labels.data
 
         return resolve(issues.data)
 
