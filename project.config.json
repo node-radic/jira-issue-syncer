@@ -1,0 +1,30 @@
+{
+    "jira": {
+        "project": "BLADE",
+        "remote": {
+            "url": "https://projects.radic.nl/rest/api",
+            "auth": {
+                "type": "basic",
+                "username": "radic",
+                "password": "$JIRA_PASSWORD"
+            }
+        }
+    },
+    "syncers": [
+        {
+            "type": "github",
+            "project": {
+                "owner": "robinradic",
+                "repo": "blade-extensions"
+            },
+            "remote": {
+                "url": "api.github.com",
+                "auth": {
+                    "type": "basic",
+                    "username": "robinradic",
+                    "password": "$GITHUB_PASSWORD"
+                }
+            }
+        }
+    ]
+}

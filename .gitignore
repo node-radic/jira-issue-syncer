@@ -1,0 +1,12 @@
+/.env
+/.idea/workspace.xml
+/.idea/misc.xml
+/.idea/dataSource*
+/.idea/sonar*
+/npm-debug.log
+/yarn-error.log
+/node_modules
+*.js
+/lib
+/bin
+/types

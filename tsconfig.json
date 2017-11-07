@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "lib": ["es2017", "dom"],
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "emitDecoratorMetadata": true,
+        "inlineSourceMap": true,
+        "allowJs": false,
+        "inlineSources": true,
+        "outDir": "./",
+        "declarationDir": "./types",
+        "declaration": true,
+        "experimentalDecorators": true,
+        "pretty": true,
+        "noImplicitAny": false,
+        "noImplicitReturns": false,
+        "allowUnreachableCode": true,
+        "allowSyntheticDefaultImports": true,
+        "typeRoots": [
+            "./node_modules/@types",
+            "./src/typings"
+        ]
+    },
+    "include": [
+        "src",
+        "src/**/*.d.ts"
+    ],
+    "exclude": [
+        "./node_modules",
+        "./types",
+        "./*.ts",
+        "*.js"
+    ],
+    "compileOnSave": true,
+    "typeAcquisition": {
+        "enable": true
+    }
+}

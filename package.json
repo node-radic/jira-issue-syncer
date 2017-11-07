@@ -1,0 +1,43 @@
+{
+    "name": "@radic/jira-issue-syncer",
+    "version": "0.0.1",
+    "description": "2-way sync between Jira issues and Github, BitBucket or custom provider",
+    "main": "index.js",
+    "types": "types",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc"
+    },
+    "bin": {
+        "jira-syncer": "bin/rlogs.js"
+    },
+    "author": "Robin Radic <rradic@hotmail.com> (https://radic.nl/)",
+    "license": "MIT",
+    "dependencies": {
+        "@radic/console-colors": "^0.9.6",
+        "@types/dotenv": "^4.0.2",
+        "@types/memory-cache": "^0.2.0",
+        "dotenv": "^4.0.0",
+        "fs-extra": "^4.0.2",
+        "github": "^12.0.1",
+        "inquirer": "^3.3.0",
+        "inversify": "^4.5.1",
+        "inversify-binding-decorators": "^3.0.0",
+        "inversify-inject-decorators": "^3.0.2",
+        "inversify-vanillajs-helpers": "^2.0.0",
+        "lodash": "^4.17.4",
+        "memory-cache": "^0.2.0",
+        "reflect-metadata": "^0.1.10",
+        "superagent": "^3.8.0",
+        "yargs": "^10.0.3"
+    },
+    "devDependencies": {
+        "@types/fs-extra": "^4.0.3",
+        "@types/inquirer": "^0.0.35",
+        "@types/lodash": "^4.14.81",
+        "@types/node": "^8.0.47",
+        "@types/superagent": "^3.5.6",
+        "@types/yargs": "^8.0.2",
+        "typescript": "^2.6.1"
+    }
+}
