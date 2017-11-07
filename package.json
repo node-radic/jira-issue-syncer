@@ -9,7 +9,7 @@
         "build": "tsc"
     },
     "bin": {
-        "jira-syncer": "bin/rlogs.js"
+        "jira-syncer": "bin/jira-syncer.js"
     },
     "author": "Robin Radic <rradic@hotmail.com> (https://radic.nl/)",
     "license": "MIT",
